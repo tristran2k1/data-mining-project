@@ -6,7 +6,6 @@ warnings.simplefilter(action='ignore', category=FutureWarning)
 import pandas as pd
 import numpy as np
 import sys
-from PANDAS import *
 import csv
 
 #All functions 
@@ -24,19 +23,23 @@ def Load_data(path):
 
 def Save_file(data, filename):
 	path = './data/' + filename
-	data.to_csv(path, index=False)
+	#data.to_csv(path, index=False)
 	print("New file is saved at: ",path)
+######
+	fields = data[0]
+	rows = data[1:]
+	with open(path, 'w',newline='') as f:
+		write = csv.writer(f)
+		write.writerow(fields)
+		write.writerows(rows)
 
 def Missing_col(df):
-	#missing_list = df.columns[df.isnull().any()]
-	
 	missing_list =[]
 	for i in range(len(df[0])):
 		for j in range(1,len(df)):
 			if df[j][i] == '':
 				missing_list.append(df[0][i])
 				break
-	print(len(missing_list))
 	return missing_list
 
 def count_missing_row(df):
@@ -47,6 +50,12 @@ def count_missing_row(df):
 				count +=1
 				break
 	return count
+
+def remove_dup_row(data):
+	removed = []
+	[removed.append(x) for x in data if x not in removed]
+	return removed
+
 
 def Fillna_data_mean(df):
 	df1 = df.select_dtypes(np.number)

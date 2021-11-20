@@ -5,8 +5,9 @@ from functions import *
 
 
 data = Load_data(sys.argv[1])
+print("Size data before:",(len(data),len(data[0])))
 
-print("Size data before:",data.shape)
-data = data.drop_duplicates()
-print("Size data after:",data.shape)
+data = remove_dup_row(data)
+print("Size data after:",(len(data),len(data[0])))
+
 Save_file(data,sys.argv[2])
