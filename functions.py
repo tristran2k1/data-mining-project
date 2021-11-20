@@ -13,8 +13,12 @@ import csv
 
 def Load_data(path):
 	path = './data/' + path
-	
-	data = pd.read_csv(path)
+	file = open(path)
+	csvreader = csv.reader(file)
+	data = []
+	for row in csvreader:
+		data.append(row)
+	#data = pd.read_csv(path)
 	return data
 
 
@@ -24,27 +28,25 @@ def Save_file(data, filename):
 	print("New file is saved at: ",path)
 
 def Missing_col(df):
-	missing_list = df.columns[df.isnull().any()]
-	"""print(missing_list.shape)
-				missing_list =[]
-				data = df.values.tolist()
-				
-				print(data[:5])"""
-	"""
-				for i in range(df.shape[1]):
-					for j in range(1,2):
-						
-			
-						if 'nan' != data[j][i]:
-							print(i, end=' ')
-							missing_list.append(df.columns[i])
-							break"""
-
-	#print(len(missing_list))
-
-	"""if 'nan' != 0:
-					print(True)"""
+	#missing_list = df.columns[df.isnull().any()]
+	
+	missing_list =[]
+	for i in range(len(df[0])):
+		for j in range(1,len(df)):
+			if df[j][i] == '':
+				missing_list.append(df[0][i])
+				break
+	print(len(missing_list))
 	return missing_list
+
+def count_missing_row(df):
+	count = 0
+	for i in range(1,len(df)):	
+		for j in range (len(df[0])):
+			if df[i][j] == '':
+				count +=1
+				break
+	return count
 
 def Fillna_data_mean(df):
 	df1 = df.select_dtypes(np.number)
