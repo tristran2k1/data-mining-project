@@ -25,7 +25,7 @@ def Save_file(data, filename):
 	path = './data/' + filename
 	#data.to_csv(path, index=False)
 	print("New file is saved at: ",path)
-######
+
 	fields = data[0]
 	rows = data[1:]
 	with open(path, 'w',newline='') as f:
@@ -86,8 +86,24 @@ def Drop_row(df, threshold):
 	return data
 
 def Drop_col(df, threshold):
-	data = df.dropna(how='any', axis=1, thresh=df.shape[0]*threshold)
-	return data
+	#data = df.dropna(how='any', axis=1, thresh=df.shape[0]*threshold)
+	max_col = int(threshold*(len(df)-1))
+	lst = []
+	for j in range(len(df[0])-1):
+		count = 0
+		i = 1
+		while((count<=max_col) and (i<len(df))):
+
+			if df[i][j] == '':
+				count +=1
+			i +=1
+		if count > max_col:
+			lst.append(int(j))
+		
+	for d in range(len(lst)-1,-1,-1):
+		for row in df:
+			del row[lst[d]]
+	return df
 
 def minmaxScaler(df):
 	df = df.select_dtypes(np.number)

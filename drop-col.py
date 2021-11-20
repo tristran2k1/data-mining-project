@@ -5,8 +5,10 @@ from functions import *
 
 
 data = Load_data(sys.argv[1])
+print("Size data before:",(len(data),len(data[0])))
 
-new_data = Drop_col(data, (100-int(sys.argv[3]))/100)
+new_data = Drop_col(data, int(sys.argv[3])/100)
 
-print("Shape of table: ", new_data.shape)
+print("Size data after:",(len(data),len(data[0])))
 Save_file(new_data, sys.argv[2])
+
