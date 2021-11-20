@@ -33,20 +33,20 @@ def Save_file(data, filename):
 		write.writerow(fields)
 		write.writerows(rows)
 
-def Missing_col(df):
+def Missing_col(data):
 	missing_list =[]
-	for i in range(len(df[0])):
-		for j in range(1,len(df)):
-			if df[j][i] == '':
-				missing_list.append(df[0][i])
+	for i in range(len(data[0])):
+		for j in range(1,len(data)):
+			if data[j][i] == '':
+				missing_list.append(data[0][i])
 				break
 	return missing_list
 
-def count_missing_row(df):
+def count_missing_row(data):
 	count = 0
-	for i in range(1,len(df)):	
-		for j in range (len(df[0])):
-			if df[i][j] == '':
+	for i in range(1,len(data)):	
+		for j in range (len(data[0])):
+			if data[i][j] == '':
 				count +=1
 				break
 	return count
@@ -81,29 +81,39 @@ def Fillna_data_median(df):
 	df6 = df5[new_cols]
 	return df6
 
-def Drop_row(df, threshold):
-	data = df.dropna(how ='any', axis=0, thresh=df.shape[1]*threshold)
+def Drop_row(data, threshold):
+	max_val = int(threshold*len(data[0]))
+	for i in range(1,len(data)):
+		count = 0
+		j = 0
+		while (count<=max_val) and (j<len(data[0])):
+			if data[i][j]=='':
+				count+=1
+			j +=1
+
+		if count>max_val:
+			data.pop(i)
+			i -= 1
 	return data
 
-def Drop_col(df, threshold):
-	#data = df.dropna(how='any', axis=1, thresh=df.shape[0]*threshold)
-	max_col = int(threshold*(len(df)-1))
+def Drop_col(data, threshold):
+	max_val = int(threshold*(len(data)-1))
 	lst = []
-	for j in range(len(df[0])-1):
+	for j in range(len(data[0])-1):
 		count = 0
 		i = 1
-		while((count<=max_col) and (i<len(df))):
-
-			if df[i][j] == '':
+		while((count<=max_val) and (i<len(data))):
+			if data[i][j] == '':
 				count +=1
 			i +=1
-		if count > max_col:
+
+		if count > max_val:
 			lst.append(int(j))
 		
 	for d in range(len(lst)-1,-1,-1):
-		for row in df:
+		for row in data:
 			del row[lst[d]]
-	return df
+	return data
 
 def minmaxScaler(df):
 	df = df.select_dtypes(np.number)

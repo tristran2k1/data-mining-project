@@ -6,7 +6,9 @@ from functions import *
 
 data = Load_data(sys.argv[1])
 
-new_data = Drop_row(data, (100-int(sys.argv[3]))/100)
+print("Size data before:",(len(data),len(data[0])))
 
-print("Shape of table: ", new_data.shape)
+new_data = Drop_row(data, int(sys.argv[3])/100)
+
+print("Size data after:",(len(data),len(data[0])))
 Save_file(new_data, sys.argv[2])
